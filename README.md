@@ -82,6 +82,9 @@ User-flow для студента
 
 <img width="1820" height="750" alt="image" src="https://github.com/user-attachments/assets/51a37ff7-c36f-4df4-9228-bce88adfd774" />
 
+User-flow для преподавателя
+
+<img width="1834" height="728" alt="image" src="https://github.com/user-attachments/assets/1ddd6e94-2a04-474f-bf65-98b45b0e6555" />
 
 
 ---
