@@ -86,6 +86,9 @@ User-flow для преподавателя
 
 <img width="1834" height="728" alt="image" src="https://github.com/user-attachments/assets/1ddd6e94-2a04-474f-bf65-98b45b0e6555" />
 
+User-flow для бухгалтера
+
+<img width="1832" height="605" alt="image" src="https://github.com/user-attachments/assets/4d8bb0a4-940e-49cf-b19d-1c96fdad08c1" />
 
 ---
 
