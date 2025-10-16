@@ -69,7 +69,7 @@
 
 Описание отношений и структур данных, используемых в ПС. Также представить скрипт (программный код), который необходим для генерации БД
 
-<img width="733" height="733" alt="image" src="https://github.com/user-attachments/assets/76606691-12f6-4394-b3b6-7df17d49004a" />
+![image](https://github.com/user-attachments/assets/85530447-a137-4cdd-b5a8-e75c47125793)
 
 ---
 
