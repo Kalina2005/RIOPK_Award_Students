@@ -1,0 +1,204 @@
+<div class="container">
+  <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4 text-light">Cтипендии</p>
+
+  <!-- Проценты вычетов -->
+  <div class="row mb-4">
+    <div class="col-md-12">
+      <div class="shadow-sm">
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label fw-bold text-light">Процент вычета в профком</label>
+              <div class="input-group">
+                <input type="number" class="form-control"
+                       [(ngModel)]="profkomPercentage"
+                       min="0" max="100" step="0.1">
+                <span class="input-group-text">%</span>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-bold text-light">Процент вычета БРСМ</label>
+              <div class="input-group">
+                <input type="number" class="form-control"
+                       [(ngModel)]="brsmPercentage"
+                       min="0" max="100" step="0.1">
+                <span class="input-group-text">%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Настройка величин стипендий -->
+  <div class="row mb-4">
+    <div class="col-md-12">
+      <h2 class="mb-2 fw-bold text-light"><i class="bi bi-cash-coin me-2"></i>Величины стипендий</h2>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead class="table-light">
+              <tr>
+                <th class="text-center"><b>Тип стипендии</b></th>
+                <th class="text-center"><b>Величина</b></th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <td class="text-center">Социальная стипендия</td>
+                <td class="text-center">
+                  <div class="input-group justify-content-center" style="max-width: 200px; margin: 0 auto;">
+                    <input type="number" class="form-control text-center"
+                           [(ngModel)]="scholarshipValues.social"
+                           min="0" step="0.01">
+                    <span class="input-group-text">BYN</span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td class="text-center">Именная стипендия</td>
+                <td class="text-center">
+                  <div class="input-group justify-content-center" style="max-width: 200px; margin: 0 auto;">
+                    <input type="number" class="form-control text-center"
+                           [(ngModel)]="scholarshipValues.named"
+                           min="0" step="0.01">
+                    <span class="input-group-text">BYN</span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td class="text-center">Стипендия совета универа</td>
+                <td class="text-center">
+                  <div class="input-group justify-content-center" style="max-width: 200px; margin: 0 auto;">
+                    <input type="number" class="form-control text-center"
+                           [(ngModel)]="scholarshipValues.universityCouncil"
+                           min="0" step="0.01">
+                    <span class="input-group-text">BYN</span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td class="text-center">Президентская стипендия</td>
+                <td class="text-center">
+                  <div class="input-group justify-content-center" style="max-width: 200px; margin: 0 auto;">
+                    <input type="number" class="form-control text-center"
+                           [(ngModel)]="scholarshipValues.presidential"
+                           min="0" step="0.01">
+                    <span class="input-group-text">BYN</span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td class="text-center">Учебная стипендия от 5 по 5,99</td>
+                <td class="text-center">
+                  <div class="input-group justify-content-center" style="max-width: 200px; margin: 0 auto;">
+                    <input type="number" class="form-control text-center"
+                           [(ngModel)]="scholarshipValues.academic5_599"
+                           min="0" step="0.01">
+                    <span class="input-group-text">BYN</span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td class="text-center">Учебная стипендия от 6 по 7,99</td>
+                <td class="text-center">
+                  <div class="input-group justify-content-center" style="max-width: 200px; margin: 0 auto;">
+                    <input type="number" class="form-control text-center"
+                           [(ngModel)]="scholarshipValues.academic6_799"
+                           min="0" step="0.01">
+                    <span class="input-group-text">BYN</span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td class="text-center">Учебная стипендия от 8 по 8,99</td>
+                <td class="text-center">
+                  <div class="input-group justify-content-center" style="max-width: 200px; margin: 0 auto;">
+                    <input type="number" class="form-control text-center"
+                           [(ngModel)]="scholarshipValues.academic8_899"
+                           min="0" step="0.01">
+                    <span class="input-group-text">BYN</span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td class="text-center">Учебная стипендия от 9 до 10</td>
+                <td class="text-center">
+                  <div class="input-group justify-content-center" style="max-width: 200px; margin: 0 auto;">
+                    <input type="number" class="form-control text-center"
+                           [(ngModel)]="scholarshipValues.academic9_10"
+                           min="0" step="0.01">
+                    <span class="input-group-text">BYN</span>
+                  </div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+      </div>
+    </div>
+  </div>
+  <!-- Таблица типов стипендий -->
+  <div class="row stipends-type">
+    <div class="col-md-12">
+      <div class="card shadow-sm">
+        <div class="card-header bg-info text-white">
+          <h3 class="mb-0 fw-bold"><i class="bi bi-list-ul me-2"></i>Типы стипендий</h3>
+        </div>
+        <div class="card-body">
+          <div class="list-group">
+            <div class="list-group-item">
+              <div class="d-flex w-100 justify-content-between">
+                <h3 class="mb-1">1. Социальная стипендия</h3>
+                <span class="badge bg-primary rounded-pill">{{ scholarshipValues.social }} BYN</span>
+              </div>
+            </div>
+            <div class="list-group-item">
+              <div class="d-flex w-100 justify-content-between">
+                <h3 class="mb-1">2. Именная стипендия</h3>
+                <span class="badge bg-primary rounded-pill">{{ scholarshipValues.named }} BYN</span>
+              </div>
+            </div>
+            <div class="list-group-item">
+              <div class="d-flex w-100 justify-content-between">
+                <h3 class="mb-1">3. Стипендия совета универа</h3>
+                <span class="badge bg-primary rounded-pill">{{ scholarshipValues.universityCouncil }} BYN</span>
+              </div>
+            </div>
+            <div class="list-group-item">
+              <div class="d-flex w-100 justify-content-between">
+                <h3 class="mb-1">4. Президентская стипендия</h3>
+                <span class="badge bg-primary rounded-pill">{{ scholarshipValues.presidential }} BYN</span>
+              </div>
+            </div>
+            <div class="list-group-item">
+              <div class="d-flex w-100 justify-content-between">
+                <h3 class="mb-1">5. Учебная стипендия от 5 по 5,99</h3>
+                <span class="badge bg-primary rounded-pill">{{ scholarshipValues.academic5_599 }} BYN</span>
+              </div>
+            </div>
+            <div class="list-group-item">
+              <div class="d-flex w-100 justify-content-between">
+                <h3 class="mb-1">6. Учебная стипендия от 6 по 7,99</h3>
+                <span class="badge bg-primary rounded-pill">{{ scholarshipValues.academic6_799 }} BYN</span>
+              </div>
+            </div>
+            <div class="list-group-item">
+              <div class="d-flex w-100 justify-content-between">
+                <h3 class="mb-1">7. Учебная стипендия от 8 по 8,99</h3>
+                <span class="badge bg-primary rounded-pill">{{ scholarshipValues.academic8_899 }} BYN</span>
+              </div>
+            </div>
+            <div class="list-group-item">
+              <div class="d-flex w-100 justify-content-between">
+                <h3 class="mb-1">8. Учебная стипендия от 9 до 10</h3>
+                <span class="badge bg-primary rounded-pill">{{ scholarshipValues.academic9_10 }} BYN</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

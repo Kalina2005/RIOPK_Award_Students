@@ -1,0 +1,10 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-auto bg-light sticky-top px-0">
+      <app-header [isLogged]="isLogged"></app-header>
+    </div>
+    <div class="col-sm p-3 min-vh-100">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

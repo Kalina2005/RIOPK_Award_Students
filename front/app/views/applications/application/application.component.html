@@ -1,0 +1,248 @@
+<div class="container">
+  <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4 text-light">Заявки на расчетные листы</p>
+
+  <!-- Фильтры и поиск -->
+<!--  <div class="row mb-4">-->
+<!--    <div class="col-md-12">-->
+<!--      <div class="card shadow-sm">-->
+<!--        <div class="card-body">-->
+<!--          <div class="row g-3 align-items-end">-->
+<!--            &lt;!&ndash; Фильтр по статусу &ndash;&gt;-->
+<!--            <div class="col-md-3">-->
+<!--              <label class="form-label fw-bold">Статус заявки</label>-->
+<!--              <select class="form-select" [(ngModel)]="selectedStatus" (change)="applyFilters()">-->
+<!--                <option value="">Все статусы</option>-->
+<!--                <option value="ожидает ответа">Ожидает ответа</option>-->
+<!--                <option value="в обработке">В обработке</option>-->
+<!--                <option value="закрыт">Закрыт</option>-->
+<!--                <option value="отклонен">Отклонен</option>-->
+<!--              </select>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Фильтр по месяцу &ndash;&gt;-->
+<!--            <div class="col-md-3">-->
+<!--              <label class="form-label fw-bold">Месяц</label>-->
+<!--              <select class="form-select" [(ngModel)]="selectedMonth" (change)="applyFilters()">-->
+<!--                <option value="">Все месяцы</option>-->
+<!--                <option *ngFor="let month of months" [value]="month.id">{{ month.name }}</option>-->
+<!--              </select>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Фильтр по году &ndash;&gt;-->
+<!--            <div class="col-md-2">-->
+<!--              <label class="form-label fw-bold">Год</label>-->
+<!--              <select class="form-select" [(ngModel)]="selectedYear" (change)="applyFilters()">-->
+<!--                <option value="">Все годы</option>-->
+<!--                <option *ngFor="let year of years" [value]="year">{{ year }}</option>-->
+<!--              </select>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Поиск &ndash;&gt;-->
+<!--            <div class="col-md-3">-->
+<!--              <label class="form-label fw-bold">Поиск по студенту</label>-->
+<!--              <div class="input-group">-->
+<!--                <input type="text" class="form-control" placeholder="ФИО студента..."-->
+<!--                       [(ngModel)]="searchTerm" (input)="applyFilters()">-->
+<!--                <button class="btn btn-outline-secondary" type="button" (click)="clearSearch()">-->
+<!--                  <i class="bi bi-x"></i>-->
+<!--                </button>-->
+<!--              </div>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Сброс фильтров &ndash;&gt;-->
+<!--            <div class="col-md-1">-->
+<!--              <button class="btn btn-outline-secondary w-100" (click)="clearFilters()" title="Сбросить фильтры">-->
+<!--                <i class="bi bi-arrow-clockwise"></i>-->
+<!--              </button>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+</div>
+
+<div class="container mt-3 mb-4">
+  <div class="col-lg-14 mt-4 mt-lg-0">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="user-dashboard-info-box table-responsive mb-0 bg-white p-4 shadow-sm rounded">
+
+          <!-- Статистика -->
+          <div class="row mb-4">
+            <div class="col-md-3">
+              <div class="card bg-primary text-white">
+                <div class="card-body text-center">
+                  <h4 class="mb-0">{{ getRequestsCountByStatus('ожидает ответа') }}</h4>
+                  <small>Ожидают ответа</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card bg-warning text-dark">
+                <div class="card-body text-center">
+                  <h4 class="mb-0">{{ getRequestsCountByStatus('в обработке') }}</h4>
+                  <small>В обработке</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card bg-success text-white">
+                <div class="card-body text-center">
+                  <h4 class="mb-0">{{ getRequestsCountByStatus('закрыт') }}</h4>
+                  <small>Закрыто</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card bg-info text-white">
+                <div class="card-body text-center">
+                  <h4 class="mb-0">{{ requests.length }}</h4>
+                  <small>Всего заявок</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <table class="table manage-candidates-top mb-0">
+            <thead>
+            <tr>
+              <th class="text-center"><b>#</b></th>
+<!--              <th class="text-center"><b>Номер заявки</b></th>-->
+              <th class="text-center"><b>Студент</b></th>
+              <th class="text-center"><b>Период</b></th>
+              <th class="text-center"><b>Дата создания</b></th>
+              <th class="text-center"><b>Статус</b></th>
+              <th class="text-center"><b>Расчетный лист</b></th>
+              <th class="text-center"><b>Действия</b></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let request of filteredRequests; let i = index">
+              <th class="text-center" scope="row">{{ i + 1 }}</th>
+<!--              <td class="text-center fw-bold">{{ request.requestNumber }}</td>-->
+              <td class="text-center">
+                <div class="d-flex align-items-center justify-content-center">
+                  <div class="ms-2">
+                    <p class="mb-0 fw-bold">{{ request.studentName }}</p>
+                    <p class="text-muted mb-0 small">{{ request.studentGroup }}</p>
+                    <p class="text-muted mb-0 small">{{ request.studentEmail }}</p>
+                  </div>
+                </div>
+              </td>
+              <td class="text-center">
+                {{ getMonthName(request.month) }} {{ request.year }}
+              </td>
+              <td class="text-center">
+                {{ request.createdDate | date:'dd.MM.yyyy' }}
+              </td>
+              <td class="text-center">
+                  <span [class]="getStatusBadgeClass(request.status)" class="badge">
+                    <i [class]="getStatusIcon(request.status)" class="me-1"></i>
+                    {{ request.status }}
+                  </span>
+              </td>
+              <td class="text-center">
+                <div *ngIf="request.calculationSheetFile; else noFile">
+                  <a [href]="request.calculationSheetFile" class="btn btn-sm btn-outline-success" target="_blank">
+                    <i class="bi bi-file-earmark-pdf"></i> Скачать
+                  </a>
+                </div>
+                <ng-template #noFile>
+                  <span class="text-muted">Не прикреплен</span>
+                </ng-template>
+              </td>
+              <td class="text-center">
+                <div class="d-flex justify-content-center gap-2">
+                  <!-- Прикрепить расчетный лист -->
+                  <button class="btn btn-sm btn-outline-success"
+                          *ngIf="request.status !== 'закрыт'"
+                          (click)="attachCalculationSheet(request)"
+                          title="Прикрепить расчетный лист">
+                    <i class="bi bi-paperclip"></i>
+                  </button>
+
+                  <!-- Изменить статус -->
+                  <div class="dropdown" *ngIf="request.status !== 'закрыт'">
+                    <button class="btn btn-sm btn-outline-warning dropdown-toggle"
+                            type="button" data-bs-toggle="dropdown"
+                            title="Изменить статус">
+                      <i class="bi bi-gear"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li>
+                        <a class="dropdown-item" href="#"
+                           (click)="updateStatus(request, 'в обработке')">
+                          <i class="bi bi-hourglass-split text-warning me-2"></i>
+                          В обработке
+                        </a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item" href="#"
+                           (click)="updateStatus(request, 'закрыт')"
+                           [class.disabled]="!request.calculationSheetFile">
+                          <i class="bi bi-check-circle text-success me-2"></i>
+                          Закрыть
+                        </a>
+                      </li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li>
+                        <a class="dropdown-item text-danger" href="#"
+                           (click)="updateStatus(request, 'отклонен')">
+                          <i class="bi bi-x-circle text-danger me-2"></i>
+                          Отклонить
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+
+          <div *ngIf="filteredRequests.length === 0" class="alert alert-info text-center mt-4" role="alert">
+            <i class="bi bi-inbox display-4 text-muted mb-3"></i>
+            <h5>Заявки не найдены</h5>
+            <p class="mb-0">Нет заявок, соответствующих выбранным фильтрам</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Модальное окно для прикрепления расчетного листа -->
+<div class="modal fade" id="attachSheetModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Прикрепить расчетный лист</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label fw-bold">Заявка #{{ selectedRequest?.requestNumber }}</label>
+          <p class="text-muted mb-3">
+            Студент: {{ selectedRequest?.studentName }}<br>
+            Период: {{ getMonthName(selectedRequest?.month) }} {{ selectedRequest?.year }}
+          </p>
+
+          <label class="form-label">Выберите файл расчетного листа (PDF)</label>
+          <input type="file" class="form-control" (change)="onCalculationSheetSelected($event)" accept=".pdf">
+          <div class="form-text">
+            Прикрепленный файл будет отправлен студенту и заявка будет закрыта
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+        <button type="button" class="btn btn-primary"
+                (click)="saveCalculationSheet()"
+                [disabled]="!newCalculationSheetFile">
+          <i class="bi bi-paperclip me-2"></i>Прикрепить и закрыть заявку
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

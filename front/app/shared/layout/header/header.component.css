@@ -1,0 +1,54 @@
+.sidebar-custom {
+  width: 250px;
+  transition: width 0.3s ease;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+}
+
+.active-link {
+  background-color: #0d6efd !important;
+  color: white !important;
+  border-radius: 8px;
+  margin: 2px 8px;
+}
+
+.nav-link {
+  color: #495057;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+  margin: 2px 8px;
+}
+
+.nav-link:hover {
+  background-color: #e9ecef;
+  color: #0d6efd;
+}
+
+.nav-text {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.profile-dropdown:hover {
+  background-color: transparent !important;
+}
+
+.dropdown-menu {
+  border: none;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  border-radius: 8px;
+}
+
+.dropdown-item {
+  padding: 0.5rem 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa;
+  color: #0d6efd;
+}
+
+.sidebar-custom .nav-text {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}

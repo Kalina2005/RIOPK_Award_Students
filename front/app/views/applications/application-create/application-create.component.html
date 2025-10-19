@@ -1,0 +1,108 @@
+<div class="container">
+  <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4 text-light">Заявка на расчетный лист</p>
+
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-sm rounded">
+        <div class="card-header bg-primary text-white">
+          <h3 class="card-title mb-0">
+            <i class="bi bi-file-earmark-text me-2"></i>
+            Новая заявка на расчетный лист
+          </h3>
+        </div>
+        <div class="card-body p-4">
+          <form [formGroup]="requestForm" (ngSubmit)="onSubmit()">
+
+            <div class="row mb-4">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-label fw-bold">Номер заявки</label>
+                  <input type="text" class="form-control bg-light" [value]="generateRequestNumber()" readonly>
+                  <small class="form-text text-muted">Номер генерируется автоматически</small>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-label fw-bold">Статус заявки</label>
+                  <input type="text" class="form-control bg-warning text-dark" value="Ожидает ответа" readonly>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-4">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-label fw-bold">Месяц <span class="text-danger">*</span></label>
+                  <select class="form-select" formControlName="month" [class.is-invalid]="isFieldInvalid('month')">
+                    <option value="">Выберите месяц</option>
+                    <option *ngFor="let month of months" [value]="month.id">
+                      {{ month.name }}
+                    </option>
+                  </select>
+                  <div class="invalid-feedback" *ngIf="isFieldInvalid('month')">
+                    Пожалуйста, выберите месяц
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-label fw-bold">Год <span class="text-danger">*</span></label>
+                  <select class="form-select" formControlName="year" [class.is-invalid]="isFieldInvalid('year')">
+                    <option value="">Выберите год</option>
+                    <option *ngFor="let year of years" [value]="year">
+                      {{ year }}
+                    </option>
+                  </select>
+                  <div class="invalid-feedback" *ngIf="isFieldInvalid('year')">
+                    Пожалуйста, выберите год
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group mb-4">
+              <label class="form-label fw-bold">Прикрепить документ (PDF)</label>
+              <div class="file-upload-area border rounded p-4 text-center"
+                   [class.border-primary]="!selectedFile"
+                   [class.border-success]="selectedFile"
+                   (dragover)="onDragOver($event)"
+                   (drop)="onFileDrop($event)"
+                   (click)="fileInput.click()">
+                <input #fileInput type="file" class="d-none" (change)="onFileSelected($event)" accept=".pdf">
+
+                <div *ngIf="!selectedFile; else fileSelected">
+                  <i class="bi bi-cloud-arrow-up display-4 text-muted mb-3"></i>
+                  <p class="mb-2">Перетащите файл сюда или нажмите для выбора</p>
+                  <p class="text-muted small">Поддерживается только PDF формат (макс. 10MB)</p>
+                </div>
+
+                <ng-template #fileSelected>
+                  <i class="bi bi-file-earmark-pdf-fill display-4 text-success mb-3"></i>
+                  <p class="mb-1 fw-bold text-success">{{ selectedFile?.name }}</p>
+                  <button type="button" class="btn btn-sm btn-outline-danger mt-2" (click)="removeFile()">
+                    <i class="bi bi-trash"></i> Удалить
+                  </button>
+                </ng-template>
+              </div>
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('file')">
+                Пожалуйста, прикрепите PDF файл
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mt-4">
+              <div class="d-flex gap-2">
+                <button type="button" class="btn btn-outline-warning" (click)="resetForm()">
+                  <i class="bi bi-arrow-clockwise me-2"></i>Очистить
+                </button>
+                <button type="submit" class="btn btn-primary" [disabled]="requestForm.invalid || isSubmitting">
+                  <i class="bi bi-send me-2"></i>
+                  Отправить заявку
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,72 @@
+<div class="container">
+  <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4 text-light">Детализация выплаты</p>
+
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <div class="card bg-light">
+        <div class="card-body">
+          <h2 class="card-title fw-bold">Общая информация</h2>
+          <p class="mb-1"><strong>Наименование:</strong> {{ payment.paymentName }} </p>
+          <p class="mb-1"><strong>Общая сумма:</strong> {{ payment.totalAmount }} $</p>
+          <p class="mb-1"><strong>Дата выплаты:</strong> {{ payment.paymentDate | date:'dd.MM.yyyy' }}</p>
+          <p class="mb-0"><strong>Статус:</strong>
+            <span [class]="payment.status === 'Оплачено' ? 'text-success' : 'text-danger'">
+              {{ payment.status }}
+            </span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-3 mb-4">
+  <div class="col-lg-14 mt-4 mt-lg-0">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h2 class="mb-0 text-light fw-bold">Список студентов</h2>
+          <button class="btn btn-outline-primary btn-sm" [routerLink]="['/payments']">
+            <i class="bi bi-arrow-left"></i> Назад к выплатам
+          </button>
+        </div>
+
+        <table class="table manage-students-top mb-0">
+          <thead>
+          <tr>
+            <th class="text-center"><b>#</b></th>
+            <th class="text-center"><b>ФИО студента</b></th>
+            <th class="text-center"><b>Сумма выплаты</b></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let student of payment.studentPayments; let i = index">
+            <th class="text-center" scope="row">{{ i + 1 }}</th>
+            <td class="text-center fw-bold">{{ student.studentName }}</td>
+            <td class="text-center">
+              <span class="fw-bold text-success">{{ student.amount }} $</span>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div *ngIf="payment.studentPayments.length === 0" class="alert alert-warning text-center" role="alert">
+          <strong>Нет данных о студентах для этой выплаты</strong>
+        </div>
+
+        <div class="row mt-4">
+          <div class="col-md-6">
+            <div class="alert alert-info">
+              <strong>Итого студентов:</strong> {{ payment.studentPayments.length || 0 }}
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="alert alert-success">
+              <strong>Общая сумма:</strong> {{ payment.totalAmount }} $
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

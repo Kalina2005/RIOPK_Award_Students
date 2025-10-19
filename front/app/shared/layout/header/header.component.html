@@ -1,0 +1,122 @@
+<div class="d-flex flex-sm-column flex-row flex-nowrap bg-light align-items-center sticky-top vh-100 sidebar-custom">
+  <div class="text-start py-3 border-bottom w-100 logo">
+    <a routerLink="/Dashboard" class="d-flex align-items-center justify-content-center text-decoration-none text-dark">
+      <img src="../assets/img/favicon-32x32.png" alt="Logo" class="me-2">
+      <span class="fw-bold fs-5 d-none d-sm-block">EduSystem</span>
+    </a>
+  </div>
+
+  <ul class="nav nav-pills flex-sm-column flex-row flex-nowrap w-100 mb-auto text-start align-items-sm-start align-items-center">
+    <li class="nav-item w-100">
+      <a routerLink="/dashboard"
+         class="nav-link py-3 px-3 d-flex align-items-center"
+         routerLinkActive="active-link"
+         [routerLinkActiveOptions]="{exact: true}">
+        <i class="bi-house fs-4 me-sm-3"></i>
+        <span class="nav-text d-none d-sm-inline">Главная</span>
+      </a>
+    </li>
+
+    <li class="nav-item w-100">
+      <a routerLink="/payments"
+         class="nav-link py-3 px-3 d-flex align-items-center"
+         routerLinkActive="active-link"
+         [routerLinkActiveOptions]="{exact: true}">
+        <i class="bi bi-wallet2 fs-4 me-sm-3"></i>
+        <span class="nav-text d-none d-sm-inline">Выплаты</span>
+      </a>
+    </li>
+
+    <li *ngIf="isDean" class="nav-item w-100">
+      <a routerLink="/stipends"
+         class="nav-link py-3 px-3 d-flex align-items-center"
+         routerLinkActive="active-link"
+         [routerLinkActiveOptions]="{exact: true}">
+        <i class="bi bi-award fs-4 me-sm-3"></i>
+        <span class="nav-text d-none d-sm-inline">Стипендии</span>
+      </a>
+    </li>
+
+    <li *ngIf="isDean" class="nav-item w-100">
+      <a routerLink="/analitycs"
+         class="nav-link py-3 px-3 d-flex align-items-center"
+         routerLinkActive="active-link"
+         [routerLinkActiveOptions]="{exact: true}">
+        <i class="bi bi-bar-chart fs-4 me-sm-3"></i>
+        <span class="nav-text d-none d-sm-inline">Аналитика</span>
+      </a>
+    </li>
+
+    <li *ngIf="!isAccountant && !isDean" class="nav-item w-100">
+      <a routerLink="/applications/create"
+         class="nav-link py-3 px-3 d-flex align-items-center"
+         routerLinkActive="active-link"
+         [routerLinkActiveOptions]="{exact: true}">
+        <i class="bi bi-book fs-4 me-sm-3"></i>
+        <span class="nav-text d-none d-sm-inline">Создать заявление</span>
+      </a>
+    </li>
+
+    <li *ngIf="isAccountant" class="nav-item w-100">
+      <a routerLink="/applications"
+         class="nav-link py-3 px-3 d-flex align-items-center"
+         routerLinkActive="active-link"
+         [routerLinkActiveOptions]="{exact: true}">
+        <i class="bi bi-book fs-4 me-sm-3"></i>
+        <span class="nav-text d-none d-sm-inline">Все заявления</span>
+      </a>
+    </li>
+
+    <li *ngIf="isAccountant" class="nav-item w-100">
+      <a routerLink="/documents"
+         class="nav-link py-3 px-3 d-flex align-items-center"
+         routerLinkActive="active-link"
+         [routerLinkActiveOptions]="{exact: true}">
+        <i class="bi bi-file-earmark-arrow-down fs-4 me-sm-3"></i>
+        <span class="nav-text d-none d-sm-inline">Документация</span>
+      </a>
+    </li>
+
+    <li *ngIf="isDean || isAccountant" class="nav-item w-100">
+      <a routerLink="/students"
+         class="nav-link py-3 px-3 d-flex align-items-center"
+         routerLinkActive="active-link"
+         [routerLinkActiveOptions]="{exact: true}">
+        <i class="bi-people fs-4 me-sm-3"></i>
+        <span class="nav-text d-none d-sm-inline">Студенты</span>
+      </a>
+    </li>
+
+    <li class="nav-item w-100">
+      <a routerLink="/profile"
+         class="nav-link py-3 px-3 d-flex align-items-center"
+         routerLinkActive="active-link"
+         [routerLinkActiveOptions]="{exact: true}">
+        <i class="bi bi-person fs-4 me-sm-3"></i>
+        <span class="nav-text d-none d-sm-inline">Профиль</span>
+      </a>
+    </li>
+  </ul>
+
+  <div class="mt-auto w-100 border-top" *ngIf="isLogged">
+    <div class="nav-item dropdown w-100">
+      <a class="nav-link py-3 px-3 d-flex align-items-center dropdown-toggle profile-dropdown"
+         href="#"
+         id="navbarDropdownMenuLink"
+         data-bs-toggle="dropdown"
+         aria-haspopup="true"
+         aria-expanded="false">
+        <img src="https://i.imgur.com/hczKIze.jpg" width="32" height="32" class="rounded-circle me-sm-3">
+        <div class="d-none d-sm-block">
+          <div class="fw-semibold">{{ userRole }}</div>
+          <small class="text-muted">Профиль</small>
+        </div>
+      </a>
+      <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+        <a class="dropdown-item" href="#" (click)="OnUserLogout()">
+          <i class="bi bi-box-arrow-right me-2"></i>Выйти
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

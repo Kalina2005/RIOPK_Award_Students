@@ -1,0 +1,129 @@
+<div class="container">
+  <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4 text-light">Выплаты</p>
+  <div class="d-flex flex-wrap align-items-center justify-content-end gap-2 mb-3">
+    <!-- Additional Filters -->
+      <div class="dropdown">
+        <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown">
+          <i class="bi bi-funnel"></i> Фильтр по дате
+        </button>
+        <div class="dropdown-menu p-3" style="width: 300px;" [formGroup]="dateFilterForm">
+          <div class="mb-3">
+            <label class="form-label">Месяц</label>
+            <select class="form-select" formControlName="month">
+              <option *ngFor="let month of months" [value]="month.id">
+                {{ month.name }}
+              </option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Год</label>
+            <select class="form-select" formControlName="year">
+              <option *ngFor="let year of years" [value]="year">
+                {{ year }}
+              </option>
+            </select>
+          </div>
+          <button class="btn btn-sm btn-primary w-100" (click)="loadPaymentsWithFilter()" [disabled]="dateFilterForm.invalid">
+            Применить
+          </button>
+
+          <div class="dropdown-divider"></div>
+          <button class="btn btn-sm btn-outline-secondary w-100" (click)="clearDateFilter()">
+            Очистить фильтры
+          </button>
+        </div>
+      </div>
+  </div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css"
+      integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous"/>
+<div class="container mt-3 mb-4">
+  <div class="col-lg-14 mt-4 mt-lg-0">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="user-dashboard-info-box table-responsive mb-0 bg-white p-4 shadow-sm rounded">
+          <table class="table manage-students-top mb-0 table-hover">
+            <thead>
+            <tr>
+              <th class="text-center"><b>#</b></th>
+              <th class="text-center"><b>Наименование выплаты</b></th>
+              <th class="text-center"><b>Величина</b></th>
+              <th class="text-center"><b>Дата выплаты</b></th>
+              <th class="text-center"><b>Статус выплаты</b></th>
+              <th class="text-center" *ngIf="!isStudent"><b>Действие</b></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let payment of payments; let i = index">
+              <th class="text-center" scope="row">{{ i + 1 }}</th>
+              <td class="text-center">{{ payment.paymentName }}</td>
+              <td class="text-center">{{ payment.totalAmount }} $</td>
+              <td class="text-center" [class.text-danger]="isOverdue(payment)" [class.fw-bold]="isOverdue(payment)">
+                {{ payment.paymentDate | date:'dd.MM.yyyy' }}
+                <span *ngIf="isOverdue(payment)" class="badge bg-danger ms-1">Просрочено</span>
+              </td>
+              <td class="text-center">
+                <div *ngIf="isAccountant; else viewStatus">
+                  <select [class]="payment.status === 'Оплачено' ? 'statusSuccess' : 'statusDecline'"  class="form-select form-select-sm border-1"
+                          [(ngModel)]="payment.status"
+                          (change)="saveStatus(payment, payment.status)">
+                    <option class="bg-light" *ngFor="let status of statusOptions" [value]="status">{{ status }}</option>
+                  </select>
+                </div>
+                <ng-template #viewStatus>
+    <span [class]="payment.status === 'Оплачено' ? 'text-success' : 'text-danger'">
+      <i [class]="payment.status === 'Оплачено' ? 'bi bi-check-circle-fill' : 'bi bi-x-circle-fill'"></i>
+      {{ payment.status }}
+    </span>
+                </ng-template>
+              </td>
+              <td class="text-center mx-auto" *ngIf="!isStudent">
+                <div class="d-flex justify-content-center gap-2">
+<!--                  <button class="btn btn-sm btn-danger" *ngIf="isAccountant"-->
+<!--                          (click)="deletePayment(payment.id)"-->
+<!--                          title="Удалить">-->
+<!--                    <i class="bi bi-trash"></i>-->
+<!--                  </button>-->
+                  <button class="btn btn-sm btn-primary"
+                          [routerLink]="['/payments', payment.id]"
+                          title="Просмотреть">
+                    <i class="bi bi-eye"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+
+          <div *ngIf="payments.length === 0" class="alert alert-warning text-center" role="alert">
+            <strong>Нет данных о выплатах</strong>
+          </div>
+
+          <div class="row g-0 align-items-center pb-4 my-3">
+            <div class="col-sm-6">
+              <div><p class="mb-sm-0">Showing 1 to 10</p></div>
+            </div>
+            <div class="col-sm-6">
+              <div class="float-sm-end">
+                <ul class="pagination mb-sm-0">
+                  <li class="page-item disabled">
+                    <a href="#" class="page-link"><i class="mdi mdi-chevron-left"></i></a>
+                  </li>
+                  <li class="page-item active"><a href="#" class="page-link">1</a></li>
+                  <li class="page-item"><a href="#" class="page-link">2</a></li>
+                  <li class="page-item"><a href="#" class="page-link">3</a></li>
+                  <li class="page-item"><a href="#" class="page-link">4</a></li>
+                  <li class="page-item"><a href="#" class="page-link">5</a></li>
+                  <li class="page-item">
+                    <a href="#" class="page-link"><i class="mdi mdi-chevron-right"></i></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

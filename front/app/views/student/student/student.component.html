@@ -1,0 +1,120 @@
+<section style="background-color: white;" class="rounded-7">
+  <i class="bi bi-arrow-left my-3 p-3" style="font-size: 2.5rem; cursor: pointer" routerLink="/students"></i>
+  <div class="container py-1">
+
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="card mb-4">
+          <div class="card-body text-center">
+             <h1 class="my-3">{{ studentInfo.name }}</h1>
+             <div class="d-flex justify-content-center mb-2">
+              <button *ngIf="isDean" type="button" class="btn btn-primary" [routerLink]="['/students/edit/', studentInfo.id]">Редактировать</button>
+            </div>
+          </div>
+        </div>
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-3">
+                <p class="mb-0">ФИО</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{ studentInfo.name }}</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Логин</p>
+              </div>
+              <div class="col-sm-9">
+<!--                <p class="text-muted mb-0">{{ studentInfo.student.username }}</p>-->
+                <p class="text-muted mb-0">{{ studentInfo.name }}</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Телефон</p>
+              </div>
+              <div class="col-sm-9">
+<!--                <p class="text-muted mb-0">{{ studentInfo.student.phone }}</p>-->
+                <p class="text-muted mb-0">{{ studentInfo.name }}</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Почта</p>
+              </div>
+              <div class="col-sm-9">
+<!--                <p class="text-muted mb-0">{{ studentInfo.student.email }}</p>-->
+                <p class="text-muted mb-0">{{ studentInfo.name }}</p>
+              </div>
+            </div>
+            <hr>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Средний балл за последнюю сессию</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{ studentInfo.gpa }}</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Часы пропусков за месяц</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{ studentInfo.absencesHours }}</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Наличие пересдач</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{ studentInfo.hasRetakes ? 'Да' : 'Нет' }}</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Премия</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{ studentInfo.bonusAmount }}</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Тип стипендии</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{ studentInfo.stipendType !== null ? studentInfo.stipendType : 'Нет' }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-11">
+            <div class="card-body rounded-7">
+              <img
+                src="https://img.freepik.com/premium-vector/guy-running-upward-graphic-with-phone-headphones-isolated-white-background_323758-148.jpg?w=1380"
+                class="img-fluid" alt="Sample image">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

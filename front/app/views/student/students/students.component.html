@@ -1,0 +1,121 @@
+<!-- Search and Filter Section -->
+<div class="container mb-4">
+  <div class="row g-3 align-items-center">
+    <!-- Search Input -->
+    <div class="col-md-6">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Поиск студента" [formControl]="searchField">
+        <button class="btn btn-primary" type="button">
+          <i class="bi bi-search"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Additional Filters -->
+    <div class="col-md-3">
+      <div class="dropdown">
+        <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown">
+          <i class="bi bi-funnel"></i> Фильтры
+        </button>
+        <div class="dropdown-menu p-3" style="width: 300px;">
+          <div *ngFor="let item of searchFilterOptions" class="form-check mb-2">
+            <input class="form-check-input"
+                   type="checkbox"
+                   (change)="checkOnFilter(item)"
+                   [checked]="item.checked || false"
+                   [id]="'filter' + item.id">
+            <label class="form-check-label" [for]="'filter' + item.id">
+              {{ item.value }}
+            </label>
+          </div>
+
+          <div class="dropdown-divider"></div>
+          <button class="btn btn-sm btn-outline-secondary w-100" (click)="clearAllFilters()">
+            Очистить фильтры
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button class="btn btn-sm btn-warning w-100 mt-2" (click)="paymentsCalculate()">Расчет</button>
+</div>
+
+<!-- Students Table -->
+<div class="container mt-3">
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead class="table-light">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">ФИО студента</th>
+            <th scope="col">Средний балл за последнюю сессию</th>
+            <th scope="col">Количество часов пропусков за месяц</th>
+            <th scope="col">Наличие пересдач</th>
+            <th scope="col">Премия</th>
+            <th scope="col">Тип стипендии</th>
+            <th scope="col" class="text-end">Действия</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let student of students; let i = index">
+            <th scope="row">{{ i + 1 }}</th>
+             <td>{{ student.name }}</td>
+             <td>{{ student.gpa }}</td>
+             <td>{{ student.absencesHours }}</td>
+             <td>{{ student.hasRetakes ? 'Да' : 'Нет' }}</td>
+             <td>{{ student.bonusAmount }}</td>
+            <td>{{ student.stipendType }}</td>
+            <td>
+              <div class="d-flex justify-content-end gap-2">
+<!--                <button class="btn btn-sm btn-outline-danger"-->
+<!--                        (click)="OnDeletedStudent(Student)"-->
+<!--                        title="Удалить">-->
+<!--                  <i class="bi bi-trash"></i>-->
+<!--                </button>-->
+                <button *ngIf="isDean" class="btn btn-sm btn-outline-success"
+                        [routerLink]="['/students/edit/', student.id]"
+                        title="Редактировать">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-primary"
+                        [routerLink]="'/students/' + student.id"
+                        title="Просмотреть">
+                  <i class="bi bi-eye"></i>
+                  <!--                        [routerLink]="['/viewStudent', Student.id]"-->
+                </button>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div *ngIf="students.length === 0" class="alert alert-warning text-center" role="alert">
+        <strong>Ничего не найдено!</strong>
+      </div>
+
+      <!-- Pagination -->
+      <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+          <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1">
+              <i class="bi bi-chevron-left"></i>
+            </a>
+          </li>
+          <li class="page-item active"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item"><a class="page-link" href="#">4</a></li>
+          <li class="page-item"><a class="page-link" href="#">5</a></li>
+          <li class="page-item">
+            <a class="page-link" href="#">
+              <i class="bi bi-chevron-right"></i>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>

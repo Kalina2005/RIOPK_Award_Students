@@ -1,0 +1,79 @@
+<div class="py-4 py-md-5 my-5">
+  <div class="card bg-glass d-flex col-xl-6 mx-auto">
+    <div class="card-body px-4 py-5 px-md-5">
+      <div class="text-center">
+        <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Профиль</p>
+      </div>
+      <div class="py-3 text-center">
+        <form class="mb-3" [formGroup]="profileForm">
+          <div class="row">
+            <div class="col">
+              <input class="form-control mb-2" type="text" placeholder="ФИО"
+                     [ngStyle]="{'border-color': profileForm.get('name')?.invalid
+                 && (profileForm.get('name')?.dirty || profileForm.get('name')?.touched) ? 'red' : '' }"
+                     formControlName="name" minlength="4">
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="row">
+              <div class="col">
+                <input class="form-control mb-2" type="text" placeholder="Логин"
+                       [ngStyle]="{'border-color': profileForm.get('username')?.invalid
+                 && (profileForm.get('username')?.dirty || profileForm.get('username')?.touched) ? 'red' : '' }"
+                       formControlName="username" minlength="4">
+              </div>
+            </div>
+          </div>
+
+          <form class="mb-3" [formGroup]="passwordForm">
+            <div class="row">
+              <div class="col">
+                <input class="form-control mb-2" type="password" placeholder="Введите текущий пароль"
+                       [ngStyle]="{'border-color': passwordForm.get('oldPassword')?.invalid
+                 && (passwordForm.get('oldPassword')?.dirty || passwordForm.get('oldPassword')?.touched) ? 'red' : '' }"
+                       formControlName="oldPassword" minlength="3">
+              </div>
+              <div class="col">
+                <input class="form-control mb-2" type="password" placeholder="Введите новый пароль"
+                       [ngStyle]="{'border-color': passwordForm.get('newPassword')?.invalid
+                 && (passwordForm.get('newPassword')?.dirty || passwordForm.get('newPassword')?.touched) ? 'red' : '' }"
+                       formControlName="newPassword" minlength="3">
+              </div>
+              <div class="col-auto">
+                <button class="btn btn-primary" type="button" (click)="updatePassword()">Обновить пароль</button>
+              </div>
+            </div>
+          </form>
+
+          <div class="mb-3">
+            <div class="row">
+              <div class="col">
+                <p-inputMask
+                  mask="+375(99)999-99-99"
+                  class="mb-2 w-100 d-block"
+                  formControlName="phone"
+                  placeholder="Телефон"
+                  [ngStyle]="{'border-color': profileForm.get('phone')?.invalid
+                   && (profileForm.get('phone')?.dirty || profileForm.get('phone')?.touched) ? 'red' : ''}">
+                </p-inputMask>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <div class="row">
+              <div class="col">
+                <input class="form-control mb-2" type="email" placeholder="Эл. почта"
+                       [ngStyle]="{'border-color': profileForm.get('email')?.invalid
+                 && (profileForm.get('email')?.dirty || profileForm.get('email')?.touched) ? 'red' : '' }"
+                       formControlName="email">
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-primary w-100" type="button" (click)="updateProfile()">Обновить</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</div>
