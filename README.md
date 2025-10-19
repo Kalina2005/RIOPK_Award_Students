@@ -27,6 +27,7 @@
 	2. [Манифесты для развертывания k8s кластера](#Манифесты_для_развертывания_k8s_кластера)
 6. [Лицензия](#Лицензия)
 7. [Контакты](#Контакты)
+8. [Пользовательский интерфейс](#Пользовательский интерфейс)
 
 ---
 ## **Архитектура**
@@ -147,3 +148,28 @@ User-flow для бухгалтера
 ## **Контакты**
 
 Автор: email
+
+## **Пользовательский интерфейс**
+
+
+
+<img width="867" height="413" alt="image" src="https://github.com/user-attachments/assets/cf6641c0-3ffb-4b2c-812c-326c4abcf8b3" />
+
+<img width="864" height="413" alt="image" src="https://github.com/user-attachments/assets/a62bf564-95d6-480f-89ae-e1d3c192d7a2" />
+
+<img width="876" height="413" alt="image" src="https://github.com/user-attachments/assets/a4b57715-c541-401d-b065-4df3b63affd1" />
+
+
+<img width="876" height="414" alt="image" src="https://github.com/user-attachments/assets/e57b8a38-e3b1-490c-a2a8-a3c2b487fc67" />
+
+<img width="874" height="413" alt="image" src="https://github.com/user-attachments/assets/12b28d39-708c-433d-9fc9-ce2e2471cb23" />
+
+<img width="867" height="414" alt="image" src="https://github.com/user-attachments/assets/1fa65c60-6723-4e2b-b012-2627955700f5" />
+
+<img width="872" height="413" alt="image" src="https://github.com/user-attachments/assets/ee008e0e-507f-4a1b-a363-122ea0a5ae71" />
+
+
+
+
+
+
