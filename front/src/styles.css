@@ -1,0 +1,29 @@
+/* You can add global styles to this file, and also import other style files */
+* {
+  font-family: 'Montserrat', sans-serif !important;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+body{
+  background-color: #f8f9fa!important
+}
+.p-4 {
+  padding: 1.5rem!important;
+}
+.mb-0, .my-0 {
+  margin-bottom: 0!important;
+}
+.shadow-sm {
+  box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important;
+}
+
+.p-inputtext {
+  width: 100%;
+  color: #212529
+}
+
+.p-inputtext::placeholder {
+  color: #616161;
+}
