@@ -1,0 +1,4 @@
+export enum ReasonTypeType {
+  RESPECTFUL = 'RESPECTFUL',
+  DISRESPECTFUL = 'DISRESPECTFUL'
+}
