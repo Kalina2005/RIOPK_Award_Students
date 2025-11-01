@@ -107,7 +107,179 @@ User-flow для бухгалтера
 
 ### Безопасность
 
-Описать подходы, использованные для обеспечения безопасности, включая описание процессов аутентификации и авторизации с примерами кода из репозитория сервера
+1 РЕАЛИЗАЦИЯ АУТЕНТИФИКАЦИИ 
+   И АВТОРИЗАЦИИ ПОЛЬЗОВАТЕЛЕЙ
+
+Для реализации аутентификации и авторизации в программной системе была использована Spring Security в сочетании с JWT (JSON Web Token).
+JWT применяется для бессессионной аутентификации, при которой каждая клиентская сессия подтверждается уникальным токеном, содержащим имя пользователя и роли.
+Это позволяет полностью отказаться от хранения сессий на сервере (архитектура RESTful API остаётся stateless).
+Использованные сторонние компоненты:
+1 Spring Security – обеспечивает инфраструктуру аутентификации, авторизации и защиты маршрутов. Подключается как зависимость spring-boot-starter-security.
+2 JJWT (io.jsonwebtoken) – библиотека для генерации и валидации JWT-токенов. Используется для подписи токенов алгоритмом HMAC-SHA256.
+3 Lombok – для автоматической генерации конструкторов и логирования (@Slf4j, @RequiredArgsConstructor).
+
+Конфигурация безопасности: основная настройка безопасности реализована в классе SecurityConfig.
+Пояснение:
+1 CSRF отключен, так как используется токеновая аутентификация.
+2 CORS включен для поддержки запросов с фронтенда.
+3 SessionCreationPolicy.STATELESS – сессии не создаются, вся информация об аутентификации хранится в JWT.
+4 JwtRequestFilter добавлен перед стандартным фильтром UsernamePasswordAuthenticationFilter – он извлекает и проверяет JWT из заголовка Authorization.
+
+@EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
+@Configuration
+public class SecurityConfig {
+    private final UserService userService;
+    private final JwtRequestFilter jwtRequestFilter;
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf(AbstractHttpConfigurer::disable)
+            .cors(cors -> cors.configurationSource(request -> {
+                var corsConfiguration = new CorsConfiguration();
+                corsConfiguration.setAllowedOriginPatterns(List.of("*"));
+                corsConfiguration.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
+                corsConfiguration.setAllowedHeaders(List.of("*"));
+                corsConfiguration.setAllowCredentials(true);
+                return corsConfiguration;
+            }))
+            .authorizeHttpRequests(auth -> auth
+                // Открытые эндпоинты
+                .requestMatchers("/auth", "/registration").permitAll()
+                // Защищённые маршруты
+                .requestMatchers("/payments/**", "/students/**", "/applications/**").authenticated()
+            )
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .exceptionHandling(ex -> ex.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
+            .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+    }
+}
+
+Фильтрация и проверка JWT: Фильтр JwtRequestFilter выполняет анализ каждого входящего запроса.
+Пояснение:
+1 Извлекает токен из заголовка Authorization.
+2 Проверяет подпись токена и срок его действия.
+3 Устанавливает контекст безопасности, добавляя роли пользователя.
+
+@Component
+@RequiredArgsConstructor
+@Slf4j
+public class JwtRequestFilter extends OncePerRequestFilter {
+
+    private final JwtTokenUtils jwtTokenUtils;
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
+
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String jwt = authHeader.substring(7);
+            String username = jwtTokenUtils.getUsername(jwt);
+
+            List<String> roles = jwtTokenUtils.getRoles(jwt);
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+                username, null,
+                roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList())
+            );
+            SecurityContextHolder.getContext().setAuthentication(token);
+        }
+        chain.doFilter(request, response);
+    }
+}
+
+Генерация и валидация токенов JWT: Класс JwtTokenUtils отвечает за создание, подпись и верификацию JWT.
+Токен включает: имя пользователя, список ролей, время жизни токена.
+Для подписи используется алгоритм HS256 и секретный ключ из application.properties.
+
+@Component
+@Slf4j
+public class JwtTokenUtils {
+
+    @Value("${jwt.secret}")
+    private String secret;
+
+    @Value("${jwt.lifetime}")
+    private Duration jwtLifetime;
+
+    public String generateToken(UserDetails userDetails) {
+        Map<String, Object> claims = new HashMap<>();
+        List<String> rolesList = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+        claims.put("roles", rolesList);
+
+        Date issuedDate = new Date();
+        Date expiredDate = new Date(issuedDate.getTime() + jwtLifetime.toMillis());
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(issuedDate)
+                .setExpiration(expiredDate)
+                .signWith(Keys.hmacShaKeyFor(secret.getBytes()), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    public String getUsername(String token) {
+        return getAllClaimsFromToken(token).getSubject();
+    }
+
+    public List<String> getRoles(String token) {
+        return getAllClaimsFromToken(token).get("roles", List.class);
+    }
+}
+
+Логика аутентификации и регистрации пользователей: контроллер AuthController предоставляет REST-эндпоинты.
+
+@RestController
+@RequiredArgsConstructor
+public class AuthController {
+    private final AuthService authService;
+    @PostMapping("/auth")
+    public ResponseEntity<?> createAuthToken(@RequestBody JwtRequest authRequest) {
+        return authService.createAuthToken(authRequest);
+    }
+    @PostMapping("/registration")
+    public ResponseEntity<?> createNewUser(@RequestBody RegistrationUserDTO registrationUserDTO) {
+        return authService.createNewUser(registrationUserDTO);
+    }
+}
+
+Метод createAuthToken() вызывает AuthService.createAuthToken() — при успешной проверке логина и пароля формируется JWT-токен:
+
+public ResponseEntity<?> createAuthToken(JwtRequest authRequest) {
+    authenticationManager.authenticate(
+        new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
+    );
+    User user = userRepository.findByUsername(authRequest.getUsername())
+        .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
+    UserDetails userDetails = loadUserByUsername(authRequest.getUsername());
+    String token = jwtTokenUtils.generateToken(userDetails);
+    List<String> roles = user.getRoles().stream().map(Role::getName).collect(Collectors.toList());
+    return ResponseEntity.ok(new JwtResponse(token, roles));
+}
+
+
+2 МЕХАНИЗМЫ ОБЕСПЕЧЕНИЯ БЕЗОПАСНОСТИ   ДАННЫХ
+
+Механизмы обеспечения безопасности данных:
+1 Хэширование паролей.
+Для хранения паролей используется BCryptPasswordEncoder:
+@Bean
+public BCryptPasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+}
+
+2 JWT-подпись и срок действия токена.
+Каждый токен подписывается секретным ключом и имеет ограниченное время жизни (параметр jwt.lifetime).
+3 Система ролей и разграничение доступа
+В JWT включаются роли (админ, студент и бухгалтер), которые проверяются при обращении к защищённым эндпоинтам.
+4 CORS и HTTPS.
+Конфигурация CORS позволяет безопасно обращаться к API из разных доменов.
+
 
 ### Оценка качества кода
 
