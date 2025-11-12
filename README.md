@@ -99,7 +99,6 @@ User-flow для бухгалтера
 
 ### UML-диаграммы
 
-Диаграмма классов
 
 Диаграмма развертывания
 <img width="298" height="591" alt="image" src="https://github.com/user-attachments/assets/4cfb3503-1b05-4ee0-b402-93fade869f97" />
