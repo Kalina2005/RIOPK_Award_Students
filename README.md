@@ -99,7 +99,14 @@ User-flow для бухгалтера
 
 ### UML-диаграммы
 
-Представить все UML-диаграммы , которые позволят более точно понять структуру и детали реализации ПС
+<img width="298" height="591" alt="image" src="https://github.com/user-attachments/assets/4cfb3503-1b05-4ee0-b402-93fade869f97" />
+
+<img width="974" height="918" alt="image" src="https://github.com/user-attachments/assets/f346acc0-3d5f-4ad3-8d20-4890571f5d8a" />
+
+<img width="878" height="560" alt="image" src="https://github.com/user-attachments/assets/119c93df-fa4b-4360-8ddf-f48f21204b3f" />
+
+<img width="523" height="752" alt="image" src="https://github.com/user-attachments/assets/9993657b-a4e9-4dd7-a40f-45a343402302" />
+
 
 ### Спецификация API
 
