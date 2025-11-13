@@ -100,6 +100,7 @@ User-flow для бухгалтера
 ### UML-диаграммы
 
 
+<img width="5023" height="4301" alt="uml-png-StudentPay1" src="https://github.com/user-attachments/assets/3ffc1165-c005-4518-ae34-6ed95cb78032" />
 
 
 <img width="298" height="591" alt="image" src="https://github.com/user-attachments/assets/4cfb3503-1b05-4ee0-b402-93fade869f97" />
