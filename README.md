@@ -307,13 +307,191 @@ public BCryptPasswordEncoder passwordEncoder() {
 
 ### Unit-тесты
 
-Представить код тестов для пяти методов и его пояснение
+
+class StipendServiceTest {
+
+    @Mock
+    private StipendRepository stipendRepository;
+
+    @Mock
+    private StipendSettingsRepository stipendSettingsRepository;
+
+    @InjectMocks
+    private StipendService stipendService;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    // ------------------------------------------------------------
+    // 1. getAllStipends()
+    // ------------------------------------------------------------
+    @Test
+    void testGetAllStipends() {
+        List<Stipend> expectedStipends = Arrays.asList(new Stipend(), new Stipend());
+        when(stipendRepository.findAll()).thenReturn(expectedStipends);
+
+        List<Stipend> result = stipendService.getAllStipends();
+
+        assertEquals(2, result.size());
+        verify(stipendRepository, times(1)).findAll();
+    }
+
+    // ------------------------------------------------------------
+    // 2. getStipendSettings()
+    // ------------------------------------------------------------
+    @Test
+    void testGetStipendSettings() {
+        StipendSettings settings = new StipendSettings();
+        when(stipendSettingsRepository.findById(1L)).thenReturn(Optional.of(settings));
+
+        Optional<StipendSettings> result = stipendService.getStipendSettings();
+
+        assertTrue(result.isPresent());
+        assertEquals(settings, result.get());
+        verify(stipendSettingsRepository, times(1)).findById(1L);
+    }
+
+    // ------------------------------------------------------------
+    // 3. updateStipendSettings()
+    // ------------------------------------------------------------
+    @Test
+    void testUpdateStipendSettings_Existing() {
+        StipendSettings existing = new StipendSettings();
+        existing.setProfkomDeductionPercent(5.0);
+        existing.setBrsmDeductionPercent(3.0);
+
+        StipendSettings newSettings = new StipendSettings();
+        newSettings.setProfkomDeductionPercent(10.0);
+        newSettings.setBrsmDeductionPercent(7.0);
+
+        when(stipendSettingsRepository.findById(1L)).thenReturn(Optional.of(existing));
+        when(stipendSettingsRepository.save(existing)).thenReturn(existing);
+
+        StipendSettings result = stipendService.updateStipendSettings(newSettings);
+
+        assertEquals(10.0, result.getProfkomDeductionPercent());
+        assertEquals(7.0, result.getBrsmDeductionPercent());
+        verify(stipendSettingsRepository).save(existing);
+    }
+
+    @Test
+    void testUpdateStipendSettings_NoExisting() {
+        StipendSettings newSettings = new StipendSettings();
+        newSettings.setProfkomDeductionPercent(12.0);
+        newSettings.setBrsmDeductionPercent(8.0);
+
+        StipendSettings newCreated = new StipendSettings();
+        when(stipendSettingsRepository.findById(1L)).thenReturn(Optional.empty());
+        when(stipendSettingsRepository.save(any(StipendSettings.class))).thenReturn(newCreated);
+
+        StipendSettings result = stipendService.updateStipendSettings(newSettings);
+
+        verify(stipendSettingsRepository).save(any(StipendSettings.class));
+    }
+
+    // ------------------------------------------------------------
+    // 4. updateStipendAmount()
+    // ------------------------------------------------------------
+    @Test
+    void testUpdateStipendAmount() {
+        Stipend stipend = new Stipend();
+        stipend.setAmount(200.0);
+
+        when(stipendRepository.findById(1L)).thenReturn(Optional.of(stipend));
+        when(stipendRepository.save(stipend)).thenReturn(stipend);
+
+        Optional<Stipend> result = stipendService.updateStipendAmount(1L, 300.0);
+
+        assertTrue(result.isPresent());
+        assertEquals(300.0, result.get().getAmount());
+        verify(stipendRepository).save(stipend);
+    }
+
+    @Test
+    void testUpdateStipendAmount_NotFound() {
+        when(stipendRepository.findById(1L)).thenReturn(Optional.empty());
+
+        Optional<Stipend> result = stipendService.updateStipendAmount(1L, 500.0);
+
+        assertFalse(result.isPresent());
+        verify(stipendRepository, never()).save(any());
+    }
+
+    // ------------------------------------------------------------
+    // 5. findByTypeName()
+    // ------------------------------------------------------------
+    @Test
+    void testFindByTypeName() {
+        Stipend stipend = new Stipend();
+        when(stipendRepository.findByTypeName("academic")).thenReturn(Optional.of(stipend));
+
+        Optional<Stipend> result = stipendService.findByTypeName("academic");
+
+        assertTrue(result.isPresent());
+        verify(stipendRepository).findByTypeName("academic");
+    }
+}
+Перед выполнением тестов создаются заглушки (@Mock) для репозиториев StipendRepository и StipendSettingsRepository. Сервис StipendService инициализируется с использованием аннотации @InjectMocks, что позволяет автоматически внедрить созданные mock-объекты вместо реальных зависимостей. Метод MockitoAnnotations.openMocks() в секции @BeforeEach подготавливает тестовое окружение перед запуском каждого теста.
+Тестирование охватывает пять основных методов сервиса:
+1 Тестирование метода getAllStipends().
+Проверяется, что сервис корректно возвращает список стипендий. С помощью Mockito задаётся поведение репозитория findAll(), после чего выполняется вызов сервиса, и проводится проверка количества элементов и факта обращения к репозиторию.
+2 Тестирование метода getStipendSettings().
+Задаётся поведение репозитория при поиске настроек по идентификатору 1. Тест подтверждает, что сервис корректно возвращает Optional c ожидаемым объектом и вызывает метод репозитория один раз.
+3 Тестирование метода updateStipendSettings().
+Проверяются два независимых сценария: настройки существуют в базе и настройки отсутствуют и создаются заново.
+В первом случае тест проверяет, что поля объекта обновляются новыми значениями, а затем сохраняются через репозиторий. Во втором – что при отсутствии данных сервис создаёт новый объект и передаёт его в метод save().
+4 Тестирование метода updateStipendAmount().
+Метод должен изменять размер стипендии по её идентификатору.
+Проверяются два варианта: запись найдена – значение поля корректно обновляется, вызывается сохранение; запись отсутствует – сервис возвращает Optional.empty(), сохранение не выполняется.
+5 Тестирование метода findByTypeName().
+Проверяется, что сервис корректно передаёт аргумент в репозиторий и возвращает Optional с найденной записью.
+
 
 ### Интеграционные тесты
 
-Представить код тестов и его пояснение
+@Test
+void testGetAllBenefits_ShouldReturnOk() throws Exception {
+    Benefit benefit1 = new Benefit();
+    benefit1.setName("Benefit 1");
+    benefit1.setDescription("Description 1");
 
----
+    Benefit benefit2 = new Benefit();
+    benefit2.setName("Benefit 2");
+    benefit2.setDescription("Description 2");
+
+    benefitRepository.save(benefit1);
+    benefitRepository.save(benefit2);
+
+    mockMvc.perform(get("/benefits"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$[0].name").value("Benefit 1"))
+            .andExpect(jsonPath("$[1].name").value("Benefit 2"));
+}
+
+
+Описание кода: в данном интеграционном тесте мы создаем две премии, сохраняем их в «замоканную» базу данных, затем делаем запрос на получение данных о премиях и проверяем, совпали ли значения.
+Пример модульного тестирования:
+
+@Test
+void getAllBenefits_ShouldReturnAllBenefits() {
+    Benefit benefit1 = new Benefit();
+    Benefit benefit2 = new Benefit();
+    when(benefitRepository.findAll()).thenReturn(List.of(benefit1, benefit2));
+
+    List<Benefit> result = benefitService.getAllBenefits();
+
+    assertNotNull(result);
+    assertEquals(2, result.size());
+    verify(benefitRepository, times(1)).findAll();
+}
+
+Данный тест представляет собой интеграционные тесты для контроллера BenefitService. 
+
+Описание Unit-теста: в данном Unit-тесте мы создаем две заглушки Премии и просим вернуть полный список премий. Затем проверяем, какое количество премий вернулось нам и совпадает ли оно с записанным.
+
 
 ## **Установка и  запуск**
 
