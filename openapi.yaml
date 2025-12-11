@@ -1,0 +1,289 @@
+openapi: 3.0.3
+info:
+  title: University Management API
+  version: 1.0.0
+  description: API для ПС учёта расчётов со студентами-стипендиатами в учреждениях высшего образования.
+servers:
+  - url: http://localhost:8080/
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    LoginRequest:
+      type: object
+      required: [login, password]
+      properties:
+        login: { type: string }
+        password: { type: string }
+
+    JwtResponse:
+      type: object
+      properties:
+        token: { type: string }
+
+    ErrorResponse:
+      type: object
+      properties:
+        code: { type: integer }
+        message: { type: string }
+
+    UserDTO:
+      type: object
+      properties:
+        id: { type: integer }
+        login: { type: string }
+        role: { type: string }
+
+    PasswordChangeRequest:
+      type: object
+      required: [oldPassword, newPassword]
+      properties:
+        oldPassword: { type: string }
+        newPassword: { type: string }
+
+    ProfileDTO:
+      type: object
+      properties:
+        id: { type: integer }
+        surname: { type: string }
+        name: { type: string }
+        patronymic: { type: string }
+        birthday: { type: string, format: date }
+        educationForm: { type: string }
+        citizenship: { type: string }
+        passportSeries: { type: string }
+        passportNumber: { type: string }
+        passportIssuer: { type: string }
+        passportIssueDate: { type: string, format: date }
+        registrationAddress: { type: string }
+        livingAddress: { type: string }
+        phoneNumber: { type: string }
+        email: { type: string }
+        course: { type: integer }
+        groupName: { type: string }
+        specialization: { type: string }
+        faculty: { type: string }
+        educationBase: { type: string }
+        active: { type: boolean }
+
+    StudentDTO:
+      type: object
+      properties:
+        id: { type: integer }
+        userId: { type: integer }
+        profileId: { type: integer }
+
+    StudentCreateDTO:
+      type: object
+      properties:
+        userId: { type: integer }
+      required: [userId]
+
+    PaymentDTO:
+      type: object
+      properties:
+        id: { type: integer }
+        studentId: { type: integer }
+        documentId: { type: integer }
+        amount: { type: number, format: double }
+        date: { type: string, format: date }
+
+    ApplicationDTO:
+      type: object
+      properties:
+        id: { type: integer }
+        studentId: { type: integer }
+        type: { type: string }
+        status: { type: string }
+        createdAt: { type: string, format: date-time }
+
+    ApplicationCreateDTO:
+      type: object
+      required: [type]
+      properties:
+        type: { type: string }
+
+    StipendDTO:
+      type: object
+      properties:
+        id: { type: integer }
+        studentId: { type: integer }
+        amount: { type: number }
+        type: { type: string }
+        active: { type: boolean }
+
+paths:
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Авторизация
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/LoginRequest' }
+      responses:
+        '200':
+          description: Успешная авторизация
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/JwtResponse' }
+        '401':
+          description: Неверный логин или пароль
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ErrorResponse' }
+
+  /users/me:
+    get:
+      tags: [Users]
+      summary: Получить данные текущего пользователя
+      security: [ { bearerAuth: [] } ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/UserDTO' }
+
+  /users/change-password:
+    post:
+      tags: [Users]
+      summary: Изменение пароля
+      security: [ { bearerAuth: [] } ]
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PasswordChangeRequest' }
+      responses:
+        '200': { description: Пароль успешно изменён }
+        '400': { description: Ошибка валидации }
+
+  /profiles/me:
+    get:
+      tags: [Profile]
+      security: [ { bearerAuth: [] } ]
+      summary: Профиль текущего пользователя
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ProfileDTO' }
+
+  /profiles/{id}:
+    get:
+      tags: [Profile]
+      security: [ { bearerAuth: [] } ]
+      parameters:
+        - in: path
+          name: id
+          schema: { type: integer }
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ProfileDTO' }
+        '404': { description: Не найден }
+
+  /students:
+    get:
+      tags: [Students]
+      security: [ { bearerAuth: [] } ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/StudentDTO' }
+    post:
+      tags: [Students]
+      security: [ { bearerAuth: [] } ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/StudentCreateDTO' }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/StudentDTO' }
+
+  /students/{id}:
+    get:
+      tags: [Students]
+      security: [ { bearerAuth: [] } ]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/StudentDTO' }
+
+  /applications:
+    get:
+      tags: [Applications]
+      security: [ { bearerAuth: [] } ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/ApplicationDTO' }
+    post:
+      tags: [Applications]
+      security: [ { bearerAuth: [] } ]
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ApplicationCreateDTO' }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApplicationDTO' }
+
+  /payments/student/{studentId}:
+    get:
+      tags: [Payments]
+      security: [ { bearerAuth: [] } ]
+      parameters:
+        - in: path
+          name: studentId
+          schema: { type: integer }
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/PaymentDTO' }
+
+  /stipends/student/{studentId}:
+    get:
+      tags: [Stipends]
+      security: [ { bearerAuth: [] } ]
+      parameters:
+        - in: path
+          name: studentId
+          schema: { type: integer }
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/StipendDTO' }
