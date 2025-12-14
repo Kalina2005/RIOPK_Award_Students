@@ -119,7 +119,12 @@ User-flow для бухгалтера
 
 ### Спецификация API
 
-Представить описание реализованных функциональных возможностей ПС с использованием Open API (можно представить либо полный файл спецификации, либо ссылку на него)
+файл с документацией openapi.yaml 
+
+<img width="582" height="490" alt="image" src="https://github.com/user-attachments/assets/a859336a-d870-4a14-984a-2a4f9217f5be" />
+
+<img width="587" height="429" alt="image" src="https://github.com/user-attachments/assets/cf40fb87-aa24-4bde-8ea8-1979383c9190" />
+
 
 ### Безопасность
 
@@ -323,11 +328,6 @@ public BCryptPasswordEncoder passwordEncoder() {
 ## **Тестирование**
 
 ### Документация
-файл с документацией openapi.yaml 
-
-<img width="582" height="490" alt="image" src="https://github.com/user-attachments/assets/a859336a-d870-4a14-984a-2a4f9217f5be" />
-
-<img width="587" height="429" alt="image" src="https://github.com/user-attachments/assets/cf40fb87-aa24-4bde-8ea8-1979383c9190" />
 
 
 
